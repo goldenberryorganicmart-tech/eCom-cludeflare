@@ -86,6 +86,7 @@ const nextConfig: any = {
         'https-proxy-agent': false,
         'agent-base': false,
         'socks': false,
+        '@react-email/render': false,
       };
 
       if (webpack) {
@@ -160,6 +161,7 @@ const nextConfig: any = {
         'https-proxy-agent': false,
         'agent-base': false,
         'socks': false,
+        '@react-email/render': false,
       };
     }
 
