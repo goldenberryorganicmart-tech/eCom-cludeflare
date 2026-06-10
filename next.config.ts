@@ -44,6 +44,8 @@ const nextConfig: any = {
       os: false,
       url: false,
       zlib: false,
+      timers: false,
+      'timers/promises': false,
     };
     return config;
   },
