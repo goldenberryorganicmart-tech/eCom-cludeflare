@@ -87,6 +87,7 @@ const nextConfig: any = {
         'agent-base': false,
         'socks': false,
         '@react-email/render': false,
+        'mongodb-client-encryption': false,
       };
 
       if (webpack) {
@@ -162,6 +163,7 @@ const nextConfig: any = {
         'agent-base': false,
         'socks': false,
         '@react-email/render': false,
+        'mongodb-client-encryption': false,
       };
     }
 
