@@ -25,6 +25,10 @@ const nextConfig: any = {
     ignoreDuringBuilds: true,
   },
   webpack: (config: any, { isServer }: any) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      mongoose: require('path').resolve(__dirname, 'src/lib/mongoose-mock.ts'),
+    };
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
