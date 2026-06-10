@@ -24,8 +24,14 @@ const nextConfig: any = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: (config: any, { isServer, webpack, nextRuntime }: any) => {
+  webpack: (config: any, { isServer, webpack, nextRuntime, dev }: any) => {
     const mockPath = require('path').resolve(__dirname, 'src/lib/node-mocks.ts');
+
+    // Disable webpack persistent cache in dev mode to prevent unhandledRejection
+    // crash when .pack.gz cache files don't exist (fresh start after cache clear).
+    if (dev) {
+      config.cache = false;
+    }
 
     // Only apply Node.js mocks for client/edge bundles — NOT for the server (Node.js) bundle.
     // The server bundle runs in real Node.js and MongoDB needs real net/dns/tls to connect.
