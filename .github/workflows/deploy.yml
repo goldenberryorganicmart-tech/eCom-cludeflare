@@ -24,8 +24,8 @@ jobs:
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
-      - name: Build with next-on-pages
-        run: npx @cloudflare/next-on-pages
+      - name: Build with OpenNext
+        run: npx @opennextjs/cloudflare
         env:
           NODE_OPTIONS: --max-old-space-size=4096
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
@@ -40,9 +40,9 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy .vercel/output/static --project-name=ecom-cludeflare --branch=main
+          command: deploy

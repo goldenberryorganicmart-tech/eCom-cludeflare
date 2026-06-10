@@ -1,4 +1,3 @@
-export const runtime = 'edge';
 
 import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';

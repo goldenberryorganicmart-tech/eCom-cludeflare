@@ -5,7 +5,6 @@ import Product from "@/models/Product";
 import Category from "@/models/Category";
 import Blog from "@/models/Blog";
 
-export const runtime = "edge";
 export const dynamic = "force-dynamic";
 
 const getDynamicRoutes = async (baseUrl: string): Promise<MetadataRoute.Sitemap> => {

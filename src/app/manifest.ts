@@ -1,7 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getCachedSettings } from '@/lib/data-fetching';
 
-export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 /**
