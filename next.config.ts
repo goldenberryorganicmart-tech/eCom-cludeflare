@@ -38,6 +38,12 @@ const nextConfig: any = {
       'node:crypto': false,
       'timers/promises': false,
       'timers': false,
+      './client-side-encryption/client_encryption': false,
+      './client-side-encryption/auto_encrypter': false,
+      './client-side-encryption/errors': false,
+      '../client-side-encryption/providers/azure': false,
+      '../client-side-encryption/providers/gcp': false,
+      '../client-side-encryption/providers/aws': false,
     };
 
     if (webpack) {
