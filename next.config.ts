@@ -21,13 +21,18 @@ const nextConfig: any = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  // Mark server-only packages so webpack never bundles them into client/edge chunks.
+  // This prevents mongodb from being included in the layout.js client chunk.
+  serverExternalPackages: ['mongodb', 'mongoose', 'nodemailer', 'bcryptjs'],
+
   webpack: (config: any, { isServer, webpack, nextRuntime, dev }: any) => {
     const mockPath = require('path').resolve(__dirname, 'src/lib/node-mocks.ts');
 
-    // Disable webpack persistent cache in dev mode to prevent unhandledRejection
-    // crash when .pack.gz cache files don't exist (fresh start after cache clear).
+    // Use in-memory cache in dev mode instead of filesystem persistent cache.
+    // Filesystem cache causes unhandledRejection when .pack.gz files don't exist
+    // on a fresh start after cache clear, which prevents server bundle compilation.
     if (dev) {
-      config.cache = false;
+      config.cache = { type: 'memory' };
     }
 
     // Only apply Node.js mocks for client/edge bundles — NOT for the server (Node.js) bundle.
