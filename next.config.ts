@@ -44,6 +44,11 @@ const nextConfig: any = {
       '../client-side-encryption/providers/azure': false,
       '../client-side-encryption/providers/gcp': false,
       '../client-side-encryption/providers/aws': false,
+      'gcp-metadata': false,
+      'gaxios': false,
+      'https-proxy-agent': false,
+      'agent-base': false,
+      'socks': false,
     };
 
     if (webpack) {
