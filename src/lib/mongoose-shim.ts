@@ -100,11 +100,17 @@ export class ShimQueryOne {
   collectionName: string;
   query: any;
   _populate: string[] = [];
+  _sort: any = null;
 
   constructor(colPromise: Promise<any>, collectionName: string, query: any) {
     this.colPromise = colPromise;
     this.collectionName = collectionName;
     this.query = query;
+  }
+
+  sort(s: any) {
+    this._sort = s;
+    return this;
   }
 
   populate(p: string) {
@@ -123,7 +129,13 @@ export class ShimQueryOne {
   async then(onfulfilled?: (value: any) => any, onrejected?: (reason: any) => any) {
     try {
       const col = await this.colPromise;
-      const doc = await col.findOne(this.query);
+      let doc;
+      if (this._sort) {
+        const results = await col.find(this.query).sort(this._sort).limit(1).toArray();
+        doc = results[0] || null;
+      } else {
+        doc = await col.findOne(this.query);
+      }
       const wrapped = wrapDoc(doc, this.collectionName);
       if (onfulfilled) {
         return onfulfilled(wrapped);
