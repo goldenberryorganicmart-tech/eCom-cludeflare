@@ -28,6 +28,14 @@ const nextConfig: any = {
     config.resolve.alias = {
       ...config.resolve.alias,
       mongoose: require('path').resolve(__dirname, 'src/lib/mongoose-mock.ts'),
+      'node:fs': false,
+      'node:path': false,
+      'node:http': false,
+      'node:https': false,
+      'node:zlib': false,
+      'node:stream': false,
+      'node:util': false,
+      'node:crypto': false,
     };
     config.resolve.fallback = {
       ...config.resolve.fallback,
