@@ -13,17 +13,16 @@ if (!cached) {
   cached = (global as any).mongo = { conn: null, promise: null, client: null };
 }
 
+const mockFinder = {
+  sort() { return this; },
+  skip() { return this; },
+  limit() { return this; },
+  toArray: async () => []
+};
+
 const mockDb = {
   collection: (name: string) => ({
-    find: () => ({
-      sort: () => ({
-        skip: () => ({
-          limit: () => ({
-            toArray: async () => []
-          })
-        })
-      })
-    }),
+    find: () => mockFinder,
     findOne: async () => null,
     insertOne: async () => ({ insertedId: 'mock' }),
     insertMany: async () => ({ insertedIds: [] }),
@@ -34,9 +33,7 @@ const mockDb = {
     deleteOne: async () => ({}),
     deleteMany: async () => ({}),
     countDocuments: async () => 0,
-    aggregate: () => ({
-      toArray: async () => []
-    })
+    aggregate: () => mockFinder
   }),
   startSession: async () => ({
     startTransaction: () => {},
