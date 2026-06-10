@@ -2,8 +2,6 @@ import NextAuth from "next-auth"
 import authConfig from "./auth.config"
 import { NextResponse } from "next/server"
 
-export const runtime = 'edge';
-
 const { auth } = NextAuth(authConfig);
 
 export const proxy = auth(async (req) => {
