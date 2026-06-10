@@ -50,12 +50,14 @@ const nextConfig: any = {
         stream: mockPath,
         fs: mockPath,
         'fs/promises': mockPath,
+        http2: mockPath,
         'node:net': mockPath,
         'node:tls': mockPath,
         'node:stream': mockPath,
         'node:dns': mockPath,
         'node:fs': mockPath,
         'node:fs/promises': mockPath,
+        'node:http2': mockPath,
         'node:path': false,
         'node:http': false,
         'node:https': false,
@@ -81,7 +83,7 @@ const nextConfig: any = {
         // Intercept Node core modules at request-time for edge/client bundles
         config.plugins.push(
           new webpack.NormalModuleReplacementPlugin(
-            /^(node:)?(fs\/promises|fs|net|tls|dns|stream)$/,
+            /^(node:)?(fs\/promises|fs|net|tls|dns|stream|http2)$/,
             (resource: any) => {
               resource.request = mockPath;
             }
@@ -107,6 +109,8 @@ const nextConfig: any = {
         fs: mockPath,
         'fs/promises': mockPath,
         'node:fs/promises': mockPath,
+        http2: mockPath,
+        'node:http2': mockPath,
         path: false,
         http: false,
         https: false,
