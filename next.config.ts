@@ -21,9 +21,6 @@ const nextConfig: any = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   webpack: (config: any, { isServer, webpack, nextRuntime, dev }: any) => {
     const mockPath = require('path').resolve(__dirname, 'src/lib/node-mocks.ts');
 
