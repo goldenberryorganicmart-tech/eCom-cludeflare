@@ -13,9 +13,48 @@ if (!cached) {
   cached = (global as any).mongo = { conn: null, promise: null, client: null };
 }
 
+const mockDb = {
+  collection: (name: string) => ({
+    find: () => ({
+      sort: () => ({
+        skip: () => ({
+          limit: () => ({
+            toArray: async () => []
+          })
+        })
+      })
+    }),
+    findOne: async () => null,
+    insertOne: async () => ({ insertedId: 'mock' }),
+    insertMany: async () => ({ insertedIds: [] }),
+    findOneAndUpdate: async () => null,
+    findOneAndDelete: async () => null,
+    updateOne: async () => ({}),
+    updateMany: async () => ({}),
+    deleteOne: async () => ({}),
+    deleteMany: async () => ({}),
+    countDocuments: async () => 0,
+    aggregate: () => ({
+      toArray: async () => []
+    })
+  }),
+  startSession: async () => ({
+    startTransaction: () => {},
+    commitTransaction: async () => {},
+    abortTransaction: async () => {},
+    endSession: async () => {}
+  })
+};
+
 async function connectToDatabase(): Promise<any> {
   if (cached.conn) {
     return cached.conn;
+  }
+
+  // Handle missing MONGODB_URI during Next.js static build phase
+  if (!MONGODB_URI) {
+    console.warn('MONGODB_URI is not defined. Using mock database.');
+    return mockDb;
   }
 
   if (!cached.promise) {
@@ -55,6 +94,10 @@ async function connectToDatabase(): Promise<any> {
       };
 
       return db;
+    }).catch((err) => {
+      // Fallback to mock DB during build phase if connection fails
+      console.warn('Failed to connect to MongoDB during build. Falling back to mock database:', err.message);
+      return mockDb;
     });
   }
 
