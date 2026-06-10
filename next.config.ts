@@ -24,7 +24,7 @@ const nextConfig: any = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  webpack: (config: any, { isServer }: any) => {
+  webpack: (config: any, { isServer, webpack }: any) => {
     config.resolve.alias = {
       ...config.resolve.alias,
       mongoose: require('path').resolve(__dirname, 'src/lib/mongoose-mock.ts'),
@@ -37,6 +37,17 @@ const nextConfig: any = {
       'node:util': false,
       'node:crypto': false,
     };
+
+    if (webpack) {
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^node:/,
+          (resource: any) => {
+            resource.request = resource.request.replace(/^node:/, '');
+          }
+        )
+      );
+    }
     config.resolve.fallback = {
       ...config.resolve.fallback,
       net: false,
