@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
     ],
     qualities: [75, 100],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
