@@ -25,7 +25,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build with OpenNext
-        run: npx @opennextjs/cloudflare
+        run: npx @opennextjs/cloudflare build
         env:
           NODE_OPTIONS: --max-old-space-size=4096
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
