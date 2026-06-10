@@ -29,17 +29,22 @@ const nextConfig: any = {
       ...config.resolve.alias,
       mongoose: require('path').resolve(__dirname, 'src/lib/mongoose-mock.ts'),
     };
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        net: false,
-        tls: false,
-        dns: false,
-        child_process: false,
-        fs: false,
-        path: false,
-      };
-    }
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      net: false,
+      tls: false,
+      dns: false,
+      child_process: false,
+      fs: false,
+      path: false,
+      http: false,
+      https: false,
+      crypto: false,
+      stream: false,
+      os: false,
+      url: false,
+      zlib: false,
+    };
     return config;
   },
 };
