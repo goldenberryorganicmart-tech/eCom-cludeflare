@@ -63,16 +63,16 @@ const nextConfig: any = {
     }
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      // Only mock Node.js-only modules on the client side
+      // Only mock net/tls on the client side (since server needs them for sockets)
       ...(isServer ? {} : {
         net: false,
         tls: false,
-        dns: false,
-        child_process: false,
-        fs: false,
-        path: false,
       }),
-      // Safe to mock globally
+      // Safe to mock globally (both client and server)
+      dns: false,
+      child_process: false,
+      fs: false,
+      path: false,
       http: false,
       https: false,
       crypto: false,
