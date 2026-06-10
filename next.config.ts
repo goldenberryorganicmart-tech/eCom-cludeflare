@@ -63,6 +63,16 @@ const nextConfig: any = {
     };
 
     if (webpack) {
+      // Intercept all Node core modules and sub-paths before alias resolution
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^(node:)?(fs\/promises|fs|net|tls|dns|stream)$/,
+          (resource: any) => {
+            resource.request = mockPath;
+          }
+        )
+      );
+      // Also strip remaining node: prefixes for other modules (http, path, etc.)
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
           /^node:/,
