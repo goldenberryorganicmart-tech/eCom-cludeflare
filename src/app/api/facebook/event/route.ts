@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getCachedSettings } from '@/lib/data-fetching';
 import { headers } from 'next/headers';

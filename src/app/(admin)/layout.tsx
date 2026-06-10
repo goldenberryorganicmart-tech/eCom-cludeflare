@@ -2,6 +2,8 @@ import { AppSidebar } from '@/components/layout/AppSidebar';
 import AdminTopbar from '@/components/layout/AdminTopbar';
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 
+export const runtime = 'edge';
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>

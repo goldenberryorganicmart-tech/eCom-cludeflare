@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { ObjectId } from 'mongodb';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';

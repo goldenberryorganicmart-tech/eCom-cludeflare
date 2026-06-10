@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import connectToDatabase from '@/lib/db';

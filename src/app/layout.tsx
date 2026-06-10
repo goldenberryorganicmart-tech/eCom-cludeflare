@@ -174,6 +174,7 @@ const jost = Jost({
   subsets: ["latin"],
 });
 
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
