@@ -36,6 +36,8 @@ const nextConfig: any = {
       'node:stream': false,
       'node:util': false,
       'node:crypto': false,
+      'timers/promises': false,
+      'timers': false,
     };
 
     if (webpack) {
@@ -50,12 +52,16 @@ const nextConfig: any = {
     }
     config.resolve.fallback = {
       ...config.resolve.fallback,
-      net: false,
-      tls: false,
-      dns: false,
-      child_process: false,
-      fs: false,
-      path: false,
+      // Only mock Node.js-only modules on the client side
+      ...(isServer ? {} : {
+        net: false,
+        tls: false,
+        dns: false,
+        child_process: false,
+        fs: false,
+        path: false,
+      }),
+      // Safe to mock globally
       http: false,
       https: false,
       crypto: false,
