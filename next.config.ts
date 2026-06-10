@@ -34,11 +34,13 @@ const nextConfig: any = {
       dns: mockPath,
       stream: mockPath,
       fs: mockPath,
+      'fs/promises': mockPath,
       'node:net': mockPath,
       'node:tls': mockPath,
       'node:stream': mockPath,
       'node:dns': mockPath,
       'node:fs': mockPath,
+      'node:fs/promises': mockPath,
       'node:path': false,
       'node:http': false,
       'node:https': false,
@@ -87,6 +89,8 @@ const nextConfig: any = {
       zlib: false,
       timers: false,
       'timers/promises': false,
+      'fs/promises': mockPath,
+      'node:fs/promises': mockPath,
     };
     return config;
   },
