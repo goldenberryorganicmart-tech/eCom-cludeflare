@@ -1,8 +1,9 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export const sendResetEmail = async (email: string, token: string) => {
+  const apiKey = process.env.RESEND_API_KEY || 're_mock_key_for_build_compatibility';
+  const resend = new Resend(apiKey);
+
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
   const encodedToken = encodeURIComponent(token);
   const resetUrl = `${baseUrl}/reset-password?token=${encodedToken}`;
