@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import connectToDatabase from './lib/db';
 import User from './models/User';
 import bcrypt from 'bcryptjs';
-import { ObjectId } from 'mongodb';
 
 import authConfig from './auth.config';
 
@@ -60,8 +59,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user && user.id) {
         try {
           await connectToDatabase();
+          const mongoose = (await import('mongoose')).default;
           
-          if (ObjectId.isValid(user.id)) {
+          if (mongoose.Types.ObjectId.isValid(user.id)) {
             const dbUser = await User.findById(user.id);
             if (dbUser) {
               token.id = dbUser._id.toString();

@@ -186,6 +186,7 @@ const GlobalSettingsSchema: Schema<IGlobalSettings> = new Schema(
   }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const GlobalSettings: any = new MongooseShim('globalsettings');
+const GlobalSettings: Model<IGlobalSettings> =
+  mongoose.models.GlobalSettings || mongoose.model<IGlobalSettings>('GlobalSettings', GlobalSettingsSchema);
+
 export default GlobalSettings;

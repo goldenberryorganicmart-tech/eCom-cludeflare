@@ -26,7 +26,7 @@ const ExpenseSchema: Schema<IExpense> = new Schema(
   { timestamps: true }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Expense: any = new MongooseShim('expenses');
+const Expense: Model<IExpense> = mongoose.models.Expense || mongoose.model<IExpense>('Expense', ExpenseSchema);
+
 export default Expense;
 

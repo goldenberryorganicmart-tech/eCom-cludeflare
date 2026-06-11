@@ -74,7 +74,7 @@ export const getTrendingProducts = (limit = 10) => {
         { $limit: limit }
       ]);
 
-      const topSellingIds = topSellingItems.map((item: any) => item._id);
+      const topSellingIds = topSellingItems.map(item => item._id);
 
       let trendingProducts = await Product.find({
         _id: { $in: topSellingIds },
@@ -83,8 +83,8 @@ export const getTrendingProducts = (limit = 10) => {
 
       // Ensure they are in the order of totalSales
       trendingProducts.sort((a: any, b: any) => {
-        const aSales = topSellingItems.find((item: any) => item._id.toString() === a._id.toString())?.totalSales || 0;
-        const bSales = topSellingItems.find((item: any) => item._id.toString() === b._id.toString())?.totalSales || 0;
+        const aSales = topSellingItems.find(item => item._id.toString() === a._id.toString())?.totalSales || 0;
+        const bSales = topSellingItems.find(item => item._id.toString() === b._id.toString())?.totalSales || 0;
         return bSales - aSales;
       });
 
@@ -92,7 +92,7 @@ export const getTrendingProducts = (limit = 10) => {
       if (trendingProducts.length < limit) {
         const remaining = limit - trendingProducts.length;
         const topRated = await Product.find({
-          _id: { $nin: trendingProducts.map((p: any) => p._id) },
+          _id: { $nin: trendingProducts.map(p => p._id) },
           isPublished: true,
           ratings: { $gt: 0 }
         })
@@ -107,7 +107,7 @@ export const getTrendingProducts = (limit = 10) => {
       if (trendingProducts.length < limit) {
         const remaining = limit - trendingProducts.length;
         const topViewed = await Product.find({
-          _id: { $nin: trendingProducts.map((p: any) => p._id) },
+          _id: { $nin: trendingProducts.map(p => p._id) },
           isPublished: true,
           views: { $gt: 0 }
         })
@@ -122,7 +122,7 @@ export const getTrendingProducts = (limit = 10) => {
       if (trendingProducts.length < limit) {
         const remaining = limit - trendingProducts.length;
         const latest = await Product.find({
-          _id: { $nin: trendingProducts.map((p: any) => p._id) },
+          _id: { $nin: trendingProducts.map(p => p._id) },
           isPublished: true,
         })
           .populate('categories')

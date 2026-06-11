@@ -8,7 +8,6 @@ import { MobileBottomNavbar } from '@/components/layout/MobileBottomNavbar';
 import SubscriptionBlocker from '../components/SubscriptionBlocker';
 import { auth } from '@/auth';
 
-
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
   const isSuperAdmin = (session?.user as any)?.role === 'super_admin';

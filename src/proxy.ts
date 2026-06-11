@@ -2,11 +2,9 @@ import NextAuth from "next-auth"
 import authConfig from "./auth.config"
 import { NextResponse } from "next/server"
 
-export const runtime = 'experimental-edge';
-
 const { auth } = NextAuth(authConfig);
 
-export default auth(async (req) => {
+export const proxy = auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   const role = (req.auth?.user as any)?.role as string | undefined;

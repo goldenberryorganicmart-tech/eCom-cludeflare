@@ -116,7 +116,7 @@ const OrderSchema: Schema<IOrder> = new Schema(
   { timestamps: true }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Order: any = new MongooseShim('orders');
+const Order: Model<IOrder> = mongoose.models.Order || mongoose.model<IOrder>('Order', OrderSchema);
+
 export default Order;
 

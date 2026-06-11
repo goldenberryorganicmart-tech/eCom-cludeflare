@@ -1,7 +1,5 @@
-
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
-
+import mongoose from 'mongoose';
 import connectToDatabase from '@/lib/db';
 import Order from '@/models/Order';
 import { auth } from '@/auth';
@@ -18,7 +16,7 @@ function validateIds(ids: any) {
     return `Cannot process more than ${MAX_BULK_IDS} orders at once`;
   }
   for (const id of ids) {
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return `Invalid order ID format: ${id}`;
     }
   }

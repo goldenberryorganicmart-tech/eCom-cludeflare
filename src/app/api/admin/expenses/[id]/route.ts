@@ -1,7 +1,5 @@
-
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
-
+import mongoose from 'mongoose';
 import { auth } from '@/auth';
 import connectToDatabase from '@/lib/db';
 import Expense from '@/models/Expense';
@@ -17,7 +15,7 @@ export async function PUT(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: 'Invalid expense ID' }, { status: 400 });
     }
 
@@ -62,7 +60,7 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: 'Invalid expense ID' }, { status: 400 });
     }
 

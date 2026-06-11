@@ -1,7 +1,6 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
-import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 import connectToDatabase from '@/lib/db';
 import Order from '@/models/Order';
 import User from '@/models/User';
@@ -20,7 +19,7 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(slug)) {
+    if (!mongoose.isValidObjectId(slug)) {
       return NextResponse.json({ message: 'Invalid order ID' }, { status: 400 });
     }
 
@@ -42,9 +41,9 @@ export async function GET(
     }
 
     return NextResponse.json(order);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching order detail:', error);
-    if (error && (error.name === 'BSONError' || error.name === 'CastError')) {
+    if (error instanceof mongoose.Error.CastError) {
       return NextResponse.json({ message: 'Invalid order ID' }, { status: 400 });
     }
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
@@ -73,7 +72,7 @@ export async function PATCH(
 
     const conn = await connectToDatabase();
 
-    if (!ObjectId.isValid(slug)) {
+    if (!mongoose.Types.ObjectId.isValid(slug)) {
       return NextResponse.json({ message: 'Invalid order id' }, { status: 400 });
     }
 
@@ -200,7 +199,7 @@ export async function DELETE(
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    if (!ObjectId.isValid(slug)) {
+    if (!mongoose.Types.ObjectId.isValid(slug)) {
       return NextResponse.json({ message: 'Invalid order ID' }, { status: 400 });
     }
 

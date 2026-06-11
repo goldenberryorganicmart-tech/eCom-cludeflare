@@ -29,7 +29,7 @@ const BannerSchema: Schema<IBanner> = new Schema(
   { timestamps: true }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Banner: any = new MongooseShim('banners');
+const Banner: Model<IBanner> = mongoose.models.Banner || mongoose.model<IBanner>('Banner', BannerSchema);
+
 export default Banner;
 

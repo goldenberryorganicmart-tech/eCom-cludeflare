@@ -1,96 +1,79 @@
-import { MongoClient, Db } from 'mongodb';
+import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Configure process-level DNS servers to bypass ISP blocks on MongoDB Atlas SRV resolution
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch (err) {
+  console.warn('Failed to set custom DNS servers:', err);
+}
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-// Global caching to prevent multiple connections during development hot-reloading
-let cached = (global as any).mongo;
-
-if (!cached) {
-  cached = (global as any).mongo = { conn: null, promise: null, client: null };
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-const mockFinder = {
-  sort() { return this; },
-  skip() { return this; },
-  limit() { return this; },
-  toArray: async () => []
+/**
+ * Global is used here to maintain a cached connection across hot reloads
+ * in development. This prevents connections growing exponentially
+ * during API Route usage.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let cached = (global as any).mongoose;
+
+if (!cached) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cached = (global as any).mongoose = { conn: null, promise: null };
+}
+
+// Custom lookup function using the main dns module (which uses custom servers set above)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const customLookup = (hostname: string, options: any, callback: any) => {
+  if (typeof options === 'function') {
+    callback = options;
+    options = {};
+  }
+
+  dns.resolve4(hostname, (err, addresses) => {
+    if (err || !addresses || addresses.length === 0) {
+      dns.resolve6(hostname, (err6, addresses6) => {
+        if (err6 || !addresses6 || addresses6.length === 0) {
+          // Fallback to standard DNS lookup
+          dns.lookup(hostname, options, callback);
+        } else {
+          if (options.all) {
+            callback(null, addresses6.map(addr => ({ address: addr, family: 6 })));
+          } else {
+            callback(null, addresses6[0], 6);
+          }
+        }
+      });
+      return;
+    }
+
+    if (options.all) {
+      callback(null, addresses.map(addr => ({ address: addr, family: 4 })));
+    } else {
+      callback(null, addresses[0], 4);
+    }
+  });
 };
 
-const mockDb = {
-  collection: (name: string) => ({
-    find: () => mockFinder,
-    findOne: async () => null,
-    insertOne: async () => ({ insertedId: 'mock' }),
-    insertMany: async () => ({ insertedIds: [] }),
-    findOneAndUpdate: async () => null,
-    findOneAndDelete: async () => null,
-    updateOne: async () => ({}),
-    updateMany: async () => ({}),
-    deleteOne: async () => ({}),
-    deleteMany: async () => ({}),
-    countDocuments: async () => 0,
-    aggregate: () => mockFinder
-  }),
-  startSession: async () => ({
-    startTransaction: () => {},
-    commitTransaction: async () => {},
-    abortTransaction: async () => {},
-    endSession: async () => {}
-  })
-};
-
-async function connectToDatabase(): Promise<any> {
+async function connectToDatabase() {
   if (cached.conn) {
     return cached.conn;
   }
 
-  // Handle missing MONGODB_URI during Next.js static build phase
-  if (!MONGODB_URI) {
-    console.warn('MONGODB_URI is not defined. Using mock database.');
-    return mockDb;
-  }
-
   if (!cached.promise) {
-    const client = new MongoClient(MONGODB_URI as string);
-    cached.promise = client.connect().then((connectedClient) => {
-      console.log('Successfully connected to MongoDB via native driver.');
-      cached.client = connectedClient;
-      
-      const db = connectedClient.db();
-      
-      // Shim startSession to support transactions on database client
-      (db as any).startSession = async () => {
-        try {
-          const session = connectedClient.startSession();
-          // Wrap session to gracefully handle environments without replica sets
-          const originalStart = session.startTransaction.bind(session);
-          session.startTransaction = function(options?: any) {
-            try {
-              originalStart(options);
-            } catch (err: any) {
-              console.warn('Transactions not supported in this environment (likely single-node local DB). Falling back to mock transaction.', err.message);
-              // Mock transactional methods to prevent crash
-              this.commitTransaction = async () => {};
-              this.abortTransaction = async () => {};
-            }
-          };
-          return session;
-        } catch (e: any) {
-          console.warn('Failed to start session, falling back to mock session:', e.message);
-          return {
-            startTransaction: () => {},
-            commitTransaction: async () => {},
-            abortTransaction: async () => {},
-            endSession: async () => {}
-          };
-        }
-      };
+    const opts = {
+      bufferCommands: false,
+      lookup: customLookup,
+    };
 
-      return db;
-    }).catch((err) => {
-      // Fallback to mock DB during build phase if connection fails
-      console.warn('Failed to connect to MongoDB during build. Falling back to mock database:', err.message);
-      return mockDb;
+    cached.promise = mongoose.connect(MONGODB_URI as string, opts).then((mongoose) => {
+      console.log('Successfully connected to MongoDB.');
+      return mongoose;
     });
   }
 
@@ -105,3 +88,5 @@ async function connectToDatabase(): Promise<any> {
 }
 
 export default connectToDatabase;
+
+

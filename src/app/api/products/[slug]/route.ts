@@ -1,9 +1,7 @@
-
-import { ObjectId } from 'mongodb';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidateTag, revalidatePath } from 'next/cache';
-
+import mongoose from 'mongoose';
 import connectToDatabase from '@/lib/db';
 import Product from '@/models/Product';
 import { auth } from '@/auth';
@@ -19,7 +17,7 @@ export async function GET(
     const { slug } = await params;
     await connectToDatabase();
 
-    const query = ObjectId.isValid(slug)
+    const query = mongoose.Types.ObjectId.isValid(slug)
       ? { _id: slug }
       : { slug: slug };
 
@@ -98,7 +96,7 @@ export async function PUT(
 
     await connectToDatabase();
 
-    const query = ObjectId.isValid(slug)
+    const query = mongoose.Types.ObjectId.isValid(slug)
       ? { _id: slug }
       : { slug: slug };
 
@@ -112,7 +110,7 @@ export async function PUT(
         const currentSlugCandidate = attempt === 1 ? safeUpdate.slug : `${safeUpdate.slug}-${attempt - 1}`;
 
         let actualId = slug;
-        if (!ObjectId.isValid(slug)) {
+        if (!mongoose.Types.ObjectId.isValid(slug)) {
           const existingProduct = await Product.findOne({ slug: slug });
           if (existingProduct) actualId = existingProduct._id.toString();
         }
@@ -186,7 +184,7 @@ export async function DELETE(
 
     await connectToDatabase();
 
-    const query = ObjectId.isValid(slug)
+    const query = mongoose.Types.ObjectId.isValid(slug)
       ? { _id: slug }
       : { slug: slug };
 

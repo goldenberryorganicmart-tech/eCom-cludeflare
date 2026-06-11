@@ -23,7 +23,7 @@ const ReviewSchema: Schema<IReview> = new Schema(
   { timestamps: true }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Review: any = new MongooseShim('reviews');
+const Review: Model<IReview> = mongoose.models.Review || mongoose.model<IReview>('Review', ReviewSchema);
+
 export default Review;
 

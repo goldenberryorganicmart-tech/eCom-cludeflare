@@ -22,7 +22,7 @@ const FAQSchema: Schema<IFAQ> = new Schema(
 // Optimize queries that filter by active status
 FAQSchema.index({ isActive: 1 });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const FAQ: any = new MongooseShim('faqs');
+const FAQ: Model<IFAQ> = mongoose.models.FAQ || mongoose.model<IFAQ>('FAQ', FAQSchema);
+
 export default FAQ;
 

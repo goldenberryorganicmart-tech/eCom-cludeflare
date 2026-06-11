@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/db';
 import FAQ from '@/models/FAQ';

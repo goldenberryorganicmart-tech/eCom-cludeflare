@@ -1,17 +1,20 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 export const sendResetEmail = async (email: string, token: string) => {
-  const apiKey = process.env.RESEND_API_KEY || 're_mock_key_for_build_compatibility';
-  const resend = new Resend(apiKey);
-
   const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
   const encodedToken = encodeURIComponent(token);
   const resetUrl = `${baseUrl}/reset-password?token=${encodedToken}`;
 
-  const fromAddress = process.env.EMAIL_FROM || 'GO Mart <onboarding@resend.dev>';
-
-  const { error } = await resend.emails.send({
-    from: fromAddress,
+  const mailOptions = {
+    from: `"GO Mart" <${process.env.EMAIL_USER}>`,
     to: email,
     subject: 'Password Reset Request - GO Mart',
     html: `
@@ -27,10 +30,8 @@ export const sendResetEmail = async (email: string, token: string) => {
         <p style="font-size: 12px; color: #888;">GO Mart - Your Trusted Online Store</p>
       </div>
     `,
-  });
+  };
 
-  if (error) {
-    console.error('Resend error:', error);
-    throw new Error(`Failed to send reset email: ${error.message}`);
-  }
+  await transporter.sendMail(mailOptions);
 };
+

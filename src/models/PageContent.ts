@@ -34,7 +34,8 @@ const PageContentSchema: Schema<IPageContent> = new Schema(
 // Ensure slug is unique
 PageContentSchema.index({ slug: 1 }, { unique: true });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const PageContent: any = new MongooseShim('pagecontents');
+const PageContent: Model<IPageContent> =
+  mongoose.models.PageContent || mongoose.model<IPageContent>('PageContent', PageContentSchema);
+
 export default PageContent;
 

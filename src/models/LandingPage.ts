@@ -64,6 +64,7 @@ const LandingPageSchema: Schema<ILandingPage> = new Schema(
 );
 
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const LandingPage: any = new MongooseShim('landingpages');
+const LandingPage: Model<ILandingPage> =
+  mongoose.models.LandingPage || mongoose.model<ILandingPage>('LandingPage', LandingPageSchema);
+
 export default LandingPage;

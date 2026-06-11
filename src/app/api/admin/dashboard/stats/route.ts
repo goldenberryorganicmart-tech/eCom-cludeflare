@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import connectToDatabase from '@/lib/db';
@@ -190,8 +189,8 @@ export async function GET(req: NextRequest) {
       },
       { $group: { _id: '$user', count: { $sum: 1 } } }
     ]);
-    const returningUsersCount = allUsersWithOrders.filter((u: any) => u.count > 1).length;
-    const newUsersCount = allUsersWithOrders.filter((u: any) => u.count === 1).length;
+    const returningUsersCount = allUsersWithOrders.filter(u => u.count > 1).length;
+    const newUsersCount = allUsersWithOrders.filter(u => u.count === 1).length;
 
     // 14. Chart Data & Simple Forecast
     const chartData = await Order.aggregate([

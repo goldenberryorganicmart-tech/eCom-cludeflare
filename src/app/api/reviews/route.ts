@@ -1,5 +1,3 @@
-
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/db';
 import Review from '@/models/Review';
@@ -7,7 +5,7 @@ import Order from '@/models/Order';
 import Product from '@/models/Product';
 import { auth } from '@/auth';
 import { z } from 'zod';
-
+import mongoose from 'mongoose';
 
 const reviewSchema = z.object({
   productId: z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid product ID'),
@@ -70,7 +68,7 @@ export async function POST(req: NextRequest) {
     const stats = await Review.aggregate([
       {
         $match: {
-          product: new ObjectId(productId),
+          product: new mongoose.Types.ObjectId(productId),
           status: 'approved'
         }
       },

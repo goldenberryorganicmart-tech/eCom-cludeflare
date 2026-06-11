@@ -35,7 +35,7 @@ CategorySchema.pre('save', function (this: any) {
   }
 });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Category: any = new MongooseShim('categories');
+const Category: Model<ICategory> = mongoose.models.Category || mongoose.model<ICategory>('Category', CategorySchema);
+
 export default Category;
 

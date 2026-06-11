@@ -42,7 +42,7 @@ export default async function PublicLandingPage({ params }: { params: Promise<{ 
 
   // Tracking view (non-blocking)
   LandingPage.updateOne({ _id: page._id }, { $inc: { viewCount: 1 } })
-    .catch((err: any) => console.error('Failed to track view:', err));
+    .catch(err => console.error('Failed to track view:', err));
 
   return (
     <div className="min-h-screen bg-white">

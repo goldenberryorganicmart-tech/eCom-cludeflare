@@ -1,11 +1,10 @@
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/db';
 import Review from '@/models/Review';
 import Product from '@/models/Product';
 import { auth } from '@/auth';
-import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
 
 // Update review status
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -23,7 +22,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
 
     await connectToDatabase();
 
-    if (!ObjectId.isValid(slug)) {
+    if (!mongoose.isValidObjectId(slug)) {
       return NextResponse.json({ message: 'Invalid review ID' }, { status: 400 });
     }
     const review = await Review.findOne({ _id: slug });
@@ -46,7 +45,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ sl
 
       const numReviews = approvedReviews.length;
       const ratings = numReviews > 0
-        ? approvedReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / numReviews
+        ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / numReviews
         : 0;
 
       await Product.findOneAndUpdate({ _id: productId }, {
@@ -73,7 +72,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
 
     await connectToDatabase();
 
-    if (!ObjectId.isValid(slug)) {
+    if (!mongoose.isValidObjectId(slug)) {
       return NextResponse.json({ message: 'Invalid review ID' }, { status: 400 });
     }
     const review = await Review.findOneAndDelete({ _id: slug });
@@ -94,7 +93,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
 
       const numReviews = approvedReviews.length;
       const ratings = numReviews > 0
-        ? approvedReviews.reduce((sum: number, r: any) => sum + r.rating, 0) / numReviews
+        ? approvedReviews.reduce((sum, r) => sum + r.rating, 0) / numReviews
         : 0;
 
       await Product.findOneAndUpdate({ _id: productId }, {

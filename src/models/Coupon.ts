@@ -52,7 +52,7 @@ const CouponSchema: Schema<ICoupon> = new Schema(
 // Ensure coupon code is unique
 CouponSchema.index({ code: 1 }, { unique: true });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Coupon: any = new MongooseShim('coupons');
+const Coupon: Model<ICoupon> = mongoose.models.Coupon || mongoose.model<ICoupon>('Coupon', CouponSchema);
+
 export default Coupon;
 

@@ -35,7 +35,8 @@ const WalletTransactionSchema: Schema<IWalletTransaction> = new Schema(
 WalletTransactionSchema.index({ userId: 1, createdAt: -1 });
 WalletTransactionSchema.index({ orderId: 1 });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const WalletTransaction: any = new MongooseShim('wallettransactions');
+const WalletTransaction: Model<IWalletTransaction> =
+  mongoose.models.WalletTransaction || mongoose.model<IWalletTransaction>('WalletTransaction', WalletTransactionSchema);
+
 export default WalletTransaction;
 

@@ -90,7 +90,7 @@ UserSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, 12);
 });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const User: any = new MongooseShim('users');
+const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
+
 export default User;
 

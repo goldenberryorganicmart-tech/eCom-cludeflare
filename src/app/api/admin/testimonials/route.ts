@@ -1,7 +1,5 @@
-
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
-
+import mongoose from 'mongoose';
 import { auth } from '@/auth';
 import dbConnect from '@/lib/db';
 import GlobalSettings from '@/models/GlobalSettings';
@@ -50,7 +48,7 @@ export async function PUT(req: NextRequest) {
     const body = await req.json();
     const { id, ...updateData } = body;
 
-    if (!id || !ObjectId.isValid(id)) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
 
@@ -76,7 +74,7 @@ export async function DELETE(req: NextRequest) {
     await dbConnect();
     const { id } = await req.json();
 
-    if (!id || !ObjectId.isValid(id)) {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ error: 'Invalid ID format' }, { status: 400 });
     }
 

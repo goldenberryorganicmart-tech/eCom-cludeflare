@@ -21,6 +21,6 @@ const SubscriberSchema: Schema = new Schema({
 // Ensure unique email
 SubscriberSchema.index({ email: 1 }, { unique: true });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Subscriber: any = new MongooseShim('subscribers');
+const Subscriber: Model<ISubscriber> = mongoose.models.Subscriber || mongoose.model<ISubscriber>('Subscriber', SubscriberSchema);
+
 export default Subscriber;

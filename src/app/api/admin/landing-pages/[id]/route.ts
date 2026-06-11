@@ -1,10 +1,8 @@
-
-import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 import connectToDatabase from '@/lib/db';
 import LandingPage from '@/models/LandingPage';
 import { auth } from '@/auth';
-
+import mongoose from 'mongoose';
 
 // Auth helper
 async function authorizeAdmin() {
@@ -25,7 +23,7 @@ export async function GET(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
     }
 
@@ -52,7 +50,7 @@ export async function PATCH(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
     }
 
@@ -99,7 +97,7 @@ export async function DELETE(
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    if (!ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json({ message: 'Invalid ID format' }, { status: 400 });
     }
 

@@ -64,7 +64,5 @@ const BlogSchema: Schema = new Schema(
 // Ensure slug is unique
 BlogSchema.index({ slug: 1 }, { unique: true });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Blog: any = new MongooseShim('blogs');
-export default Blog;
+export default mongoose.models.Blog || mongoose.model<IBlog>('Blog', BlogSchema);
 

@@ -122,7 +122,7 @@ ProductSchema.pre('validate', function(this: any) {
   }
 });
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Product: any = new MongooseShim('products');
+const Product: Model<IProduct> = mongoose.models.Product || mongoose.model<IProduct>('Product', ProductSchema);
+
 export default Product;
 

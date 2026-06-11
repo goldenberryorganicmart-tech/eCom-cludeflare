@@ -25,7 +25,7 @@ const SliderSchema: Schema<ISlider> = new Schema(
   { timestamps: true }
 );
 
-import { MongooseShim } from '@/lib/mongoose-shim';
-const Slider: any = new MongooseShim('sliders');
+const Slider: Model<ISlider> = mongoose.models.Slider || mongoose.model<ISlider>('Slider', SliderSchema);
+
 export default Slider;
 
