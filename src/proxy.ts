@@ -4,8 +4,6 @@ import { NextResponse } from "next/server"
 
 const { auth } = NextAuth(authConfig);
 
-export const runtime = 'edge';
-
 export const proxy = auth(async (req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
@@ -58,7 +56,6 @@ export const proxy = auth(async (req) => {
 });
 
 export const config = {
-  runtime: 'edge',
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
